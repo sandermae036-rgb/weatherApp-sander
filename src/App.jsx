@@ -1,13 +1,24 @@
+import { useState } from "react"
 import SearchCity from "./components/searchCity"
 
 function App() {
-  const apiKey = "3bf55063aa8c8b016dad200eee4066cd"
 
-  return (
-    <>
-      <SearchCity />
-    </>
-  )
+  // state of fetching the data --------------------------------------------------------------------------
+  const [state, setState] = useState("no state")
+
+  if (state == "no state") {
+    return (
+      <>
+        <SearchCity setState={setState} />
+      </>
+    )
+  } else if (state == "pending") {
+    return (<p> pending... </p>)
+  } else if (state == "error") {
+    return (
+      <p> sorry but something went wrong please try again later </p>
+    )
+  }
 }
 
 export default App
