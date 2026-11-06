@@ -40,23 +40,17 @@ export default function SearchCity({ setState, setCityData, cityData, weather, s
 
         try {
             const latitude = locationData[0].lat
-            console.log(latitude);
 
             const longtitude = locationData[0].lon
-            console.log(longtitude);
 
             const weatherApi = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longtitude + "&appid=" + API_key
-            console.log(weatherApi);
 
             setState("pending")
 
-            const respons = await fetch(weatherApi)
-            const data = await respons.json()
+            const weatherRespons = await fetch(weatherApi)
+            const weatherData = await weatherRespons.json()
 
-            console.log(respons);
-
-            setWeather(data)
-            console.log(data);
+            setWeather(weatherData)
 
             setState("no state")
 
@@ -78,7 +72,7 @@ export default function SearchCity({ setState, setCityData, cityData, weather, s
                 </button>
             </form>
 
-            {(cityData != null) ? <WeatherDisplay cityData={cityData} Weather={weather} /> : "there is no data yet"}
+            {(cityData != null && weather != null) ? <WeatherDisplay cityData={cityData} weather={weather} /> : "there is no data yet"}
 
         </>
     )

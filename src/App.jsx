@@ -1,13 +1,12 @@
 import { useState } from "react"
 import SearchCity from "./components/searchCity"
-import WeatherDisplay from "./components/weatherDisplay"
 
 function App() {
 
   // state of fetching the data --------------------------------------------------------------------------
   const [state, setState] = useState("no state")
 
-  const [weather, setWeather] = useState()
+  const [weather, setWeather] = useState({})
 
   const [cityData, setCityData] = useState()
 
@@ -18,7 +17,7 @@ function App() {
         <header>
           <div>
 
-            <img src="" alt="Logo" />
+            <img src="qefef" alt="Logo" />
 
             <h1>
               Vejrblik
@@ -32,7 +31,7 @@ function App() {
 
           <div>
 
-            <img src="" alt="sol logo" />
+            <img src="sbsrb" alt="sol logo" />
 
             <p>
               Dansk vejr &#8451;

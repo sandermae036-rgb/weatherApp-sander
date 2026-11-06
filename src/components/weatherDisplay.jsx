@@ -1,7 +1,10 @@
-export default function WeatherDisplay({ cityData }) {
+export default function WeatherDisplay({ cityData, weather }) {
 
     const city = cityData[0];
     console.log(city);
+
+    console.log(weather);
+
 
     return (
         <>
