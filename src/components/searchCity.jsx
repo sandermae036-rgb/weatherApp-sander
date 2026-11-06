@@ -1,4 +1,6 @@
-export default function SearchCity({ setState }) {
+import WeatherDisplay from "./weatherDisplay"
+
+export default function SearchCity({ setState, setCityData, cityData, weather, setWeather }) {
 
     const API_url = import.meta.env.VITE_API
     const API_key = import.meta.env.VITE_API_KEY
@@ -16,16 +18,44 @@ export default function SearchCity({ setState }) {
         url.searchParams.set("q", city)
         url.searchParams.set("appid", API_key)
 
-        // console.log(city);
-        // console.log(url);
-
         try {
             setState("pending")
 
             const respons = await fetch(url)
             const data = await respons.json()
 
+            setState("no state")
+
+            setCityData(data)
+
+            getWeather(data)
+
+        } catch (error) {
+            setState("error")
+        }
+    }
+
+
+    async function getWeather(locationData) {
+
+        try {
+            const latitude = locationData[0].lat
+            console.log(latitude);
+
+            const longtitude = locationData[0].lon
+            console.log(longtitude);
+
+            const weatherApi = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longtitude + "&appid=" + API_key
+            console.log(weatherApi);
+
+            setState("pending")
+
+            const respons = await fetch(weatherApi)
+            const data = await respons.json()
+
             console.log(respons);
+
+            setWeather(data)
             console.log(data);
 
             setState("no state")
@@ -33,6 +63,7 @@ export default function SearchCity({ setState }) {
         } catch (error) {
             setState("error")
         }
+
     }
 
     return (
@@ -46,6 +77,9 @@ export default function SearchCity({ setState }) {
                     Søg
                 </button>
             </form>
+
+            {(cityData != null) ? <WeatherDisplay cityData={cityData} Weather={weather} /> : "there is no data yet"}
+
         </>
     )
 }
