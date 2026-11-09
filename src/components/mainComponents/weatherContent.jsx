@@ -3,35 +3,41 @@ import WeatherDisplay from "./weatherDisplay";
 
 export default function WeatherContent({ location, setState, setWeather, weather }) {
 
-    const lon = location[0].lon
+    if (location[0] != undefined) {
 
-    const lat = location[0].lat
+        const lon = location[0].lon
 
-    useEffect(() => {
-        weatherData()
+        const lat = location[0].lat
 
-        async function weatherData() {
-            const API_key = import.meta.env.VITE_API_KEY
+        useEffect(() => {
+            weatherData()
 
-            const url = new URL("https://api.openweathermap.org/data/2.5/weather")
+            async function weatherData() {
+                const API_key = import.meta.env.VITE_API_KEY
 
-            url.searchParams.set("lat", lat)
-            url.searchParams.set("lon", lon)
-            url.searchParams.set("appid", API_key)
+                const url = new URL("https://api.openweathermap.org/data/2.5/weather")
 
-            try {
-                const respons = await fetch(url)
-                const data = await respons.json()
+                if (lon && lat != undefined) {
+                    url.searchParams.set("lat", lat)
+                    url.searchParams.set("lon", lon)
+                    url.searchParams.set("appid", API_key)
 
-                setWeather(data)
+                    try {
+                        const respons = await fetch(url)
+                        const data = await respons.json()
 
-            } catch (error) {
-                setState("error")
+                        setWeather(data)
+
+                    } catch (error) {
+                        setState("error")
+                    }
+
+                }
+
             }
 
-        }
-
-    }, [lon, lat])
+        }, [lon, lat])
+    }
 
     return (
         <>

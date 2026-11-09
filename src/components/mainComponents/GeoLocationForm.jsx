@@ -4,6 +4,7 @@ export default function GeoLocation({ setState, setLocation }) {
     const API_key = import.meta.env.VITE_API_KEY
 
     async function searchForGeoLocation(event) {
+
         event.preventDefault()
 
         const city = new FormData(event.target).get("city")
@@ -12,16 +13,25 @@ export default function GeoLocation({ setState, setLocation }) {
 
         url.searchParams.set("q", city)
         url.searchParams.set("appid", API_key)
-
-        try {
-            const respons = await fetch(url)
-            const data = await respons.json()
-
-            setLocation(data)
-
-
-        } catch (error) {
+        if (city == " ") {
             setState("error")
+        } else if (city == "") {
+            setState("error")
+        } else {
+
+            try {
+                setState("pending")
+                const respons = await fetch(url)
+                const data = await respons.json()
+
+                setState("no state")
+
+                setLocation(data)
+
+
+            } catch (error) {
+                setState("error")
+            }
         }
     }
 
