@@ -1,4 +1,4 @@
-export default function GeoLocation({ setState, setLocation }) {
+export default function GeoLocation({ setState, setLocation, setWeather }) {
 
     const API_url = import.meta.env.VITE_API
     const API_key = import.meta.env.VITE_API_KEY
@@ -21,13 +21,18 @@ export default function GeoLocation({ setState, setLocation }) {
 
             try {
                 setState("pending")
+                setLocation(null)
+                setWeather(null)
                 const respons = await fetch(url)
                 const data = await respons.json()
 
+                if (!respons.ok || !Array.isArray(data) || data.length === 0) {
+                    setState("error")
+                    return
+                }
+
                 setState("no state")
-
                 setLocation(data)
-
 
             } catch (error) {
                 setState("error")

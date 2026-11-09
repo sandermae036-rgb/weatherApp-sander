@@ -3,45 +3,58 @@ import WeatherDisplay from "./weatherDisplay";
 
 export default function WeatherContent({ location, setState, setWeather, weather }) {
 
-    if (location[0] != undefined) {
+    const coordinates = location?.[0]
+    const lon = coordinates?.lon
+    const lat = coordinates?.lat
 
-        const lon = location[0].lon
+    useEffect(() => {
+        if (lon == null || lat == null) {
+            return
+        }
 
-        const lat = location[0].lat
+        let cancelled = false
+        setWeather(null)
+        setState("pending")
 
-        useEffect(() => {
-            weatherData()
+        async function weatherData() {
+            const API_key = import.meta.env.VITE_API_KEY
+            const url = new URL("https://api.openweathermap.org/data/2.5/weather")
+            url.searchParams.set("lat", lat)
+            url.searchParams.set("lon", lon)
+            url.searchParams.set("appid", API_key)
 
-            async function weatherData() {
-                const API_key = import.meta.env.VITE_API_KEY
+            try {
+                const respons = await fetch(url)
+                const data = await respons.json()
 
-                const url = new URL("https://api.openweathermap.org/data/2.5/weather")
-
-                if (lon && lat != undefined) {
-                    url.searchParams.set("lat", lat)
-                    url.searchParams.set("lon", lon)
-                    url.searchParams.set("appid", API_key)
-
-                    try {
-                        const respons = await fetch(url)
-                        const data = await respons.json()
-
-                        setWeather(data)
-
-                    } catch (error) {
+                if (!respons.ok || !data.main || !Array.isArray(data.weather)) {
+                    if (!cancelled) {
                         setState("error")
                     }
-
+                    return
                 }
 
+                if (!cancelled) {
+                    setWeather(data)
+                    setState("no state")
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setState("error")
+                }
             }
+        }
 
-        }, [lon, lat])
-    }
+        weatherData()
+
+        return () => {
+            cancelled = true
+        }
+    }, [lon, lat, setState, setWeather])
 
     return (
         <>
-            {weather && location && <WeatherDisplay weather={weather} location={location[0]} />}
+            {weather?.main && coordinates && <WeatherDisplay weather={weather} location={coordinates} />}
         </>
     )
 }

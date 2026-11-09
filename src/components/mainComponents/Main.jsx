@@ -21,15 +21,13 @@ export default function Main() {
                 </p>
 
                 {/* form ----------------------------------------------------------- */}
-                < GeoLocation setState={setState} setLocation={setLocation} />
+                < GeoLocation setState={setState} setLocation={setLocation} setWeather={setWeather} />
 
                 {/* sets the state if data is getting fetched = pending, if data failed to fetch = error, if data succed it displays the goes fetching again */}
-                {state === "pending" ? (
-                    <p>pending...</p>
-                ) : state === "error" ? (
-                    <p>Sorry but, something went wrong. Please try again later.</p>
-                ) : (
-                    location && <WeatherContent location={location} setState={setState} setWeather={setWeather} weather={weather} />
+                {state === "pending" && <p>pending...</p>}
+                {state === "error" && <p>Sorry but, something went wrong. Please try again later.</p>}
+                {location && state !== "error" && (
+                    <WeatherContent location={location} setState={setState} setWeather={setWeather} weather={weather} />
                 )}
 
                 {/* the actual weather data displayed -------------------------------------------------*/}
