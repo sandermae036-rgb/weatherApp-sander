@@ -6,8 +6,6 @@ export default function Main() {
 
     const [location, setLocation] = useState(null)
     const [weather, setWeather] = useState(null)
-    console.log(weather);
-
 
     const [state, setState] = useState("no state")
 

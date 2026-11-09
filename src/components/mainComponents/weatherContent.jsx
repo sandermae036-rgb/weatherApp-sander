@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import WeatherDisplay from "./weatherDisplay";
 
 export default function WeatherContent({ location, setState, setWeather, weather }) {
 
@@ -34,7 +35,7 @@ export default function WeatherContent({ location, setState, setWeather, weather
 
     return (
         <>
-
+            {weather && location && <WeatherDisplay weather={weather} location={location[0]} />}
         </>
     )
 }
